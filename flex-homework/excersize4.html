@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card-container div{
+            border: 1px solid black;
+            padding: 5px;
+            flex: 1;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.75);
+        }
+
+        @media (max-width: 768px) {
+            .card-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore sed, amet officiis aliquam, eveniet veniam recusandae voluptatem error mollitia aliquid rerum assumenda! Eligendi sapiente, nisi eveniet provident iure nihil natus temporibus distinctio rem ipsam eum id commodi consequuntur eaque officiis.</div>
+        <div class="card">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In, omnis? Assumenda dolores consequatur accusantium voluptatum voluptates quia et perspiciatis fugiat!</div>
+        <div class="card">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit ipsam esse voluptate ut, voluptates cumque quam, tempore, quae expedita maxime in aperiam optio! Deleniti quod, saepe ex quasi a architecto!</div>
+    </div>
+</body>
+</html>

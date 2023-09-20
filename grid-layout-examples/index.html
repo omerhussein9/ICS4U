@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omer's Website</title>
+
+    <style>
+        body {
+            background-color: #ccc;
+        }
+
+        .navbar-container {
+            display: flex;
+            width: 100%;
+            height: 75px;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #FFA500;
+            border: 1px solid black;
+        }
+
+        .navbar-container a{
+            text-decoration: none;
+            color: black;
+            font-family: Georgia;
+            padding: 10px;
+        }
+
+        .grid-container {
+            margin: 10px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+        }
+
+        .item {
+            display: flex;
+            flex-direction: column;
+
+            margin: 10px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            border: 2px solid black;
+        }
+
+        @media(max-width: 768px) {
+            .navbar-container {
+                height: 250px;
+                flex-direction: column;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar-container">
+        <h2>Omer's Website</h2>
+        <a href="" class="link">Home</a>
+        <a href="" class="link">About</a>
+        <a href="" class="link">Services</a>
+        <a href="" class="link">Contacts</a>
+    </div>
+
+    <div class="grid-container">
+        <div class="item">
+            <img src="https://www.pressconnects.com/gcdn/-mm-/20ae1ba6df2f95980a0bf15add57998b959e694d/c=0-156-2999-1843/local/-/media/Binghamton/2015/02/19/B9316324544Z.1_20150219222358_000_GASA0QDU0.1-0.jpg?width=1200&disable=upscale&format=pjpg&auto=webp">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur expedita a iure at quisquam iusto ducimus esse, repudiandae rerum assumenda hic minima natus provident. Aspernatur ipsum reiciendis est ut porro fuga error, officiis facilis saepe quasi, quibusdam, commodi tenetur quas?</p>
+        </div>
+        <div class="item">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores vel nemo ipsum obcaecati tempore, officiis itaque optio dolorem excepturi iste laborum ex recusandae soluta, dignissimos possimus quod id minus unde animi cumque corrupti voluptates, assumenda maiores. Eveniet dicta explicabo, omnis architecto officia, in illo alias reprehenderit recusandae praesentium quaerat cum magnam quidem adipisci laboriosam ullam? Aut blanditiis est tempora sequi ad ea amet vero esse, enim cumque repudiandae consectetur at saepe eos, modi a! Sunt obcaecati, reprehenderit et a nostrum soluta magnam ab. Ipsam rem expedita esse blanditiis aspernatur magnam sint voluptatibus tempore est, adipisci quod explicabo, nisi architecto ea!</p>
+            <img src="https://vastphotos.com/files/uploads/photos/10194/new-york-city-fine-art-l.jpg?v=20220712073521">
+        </div>
+    </div>
+</body>
+</html>

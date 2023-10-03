@@ -1,0 +1,65 @@
+@font-face {
+    font-family: Lunamisa;
+    src: url(fonts/Lunasima-Regular.ttf);
+}
+
+body {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0px;
+    font-family: Lunamisa;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.navbar-container {
+    display: flex;
+    color: white;
+    width: 100%;
+    height: 75px;
+    justify-content: space-around;
+    align-items: center;
+    background-image: linear-gradient(orange, red);
+}
+
+.navbar-container a{
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+}
+
+.navbar-container h2{
+    text-shadow: 2px 2px 5px black;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: white;
+    width: 100%;
+    height: 150px;
+    background-image: linear-gradient(red, orange);
+}
+
+.social-media-container {
+    width: 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.social-media-container ul {
+    width: 20px;
+    height: 20px;
+}
+
+@media(max-width: 768px) {
+    .navbar-container {
+        height: 250px;
+        flex-direction: column;
+    }
+}

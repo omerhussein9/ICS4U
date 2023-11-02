@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const students = [
+            { name: 'Alice', score: 75 },
+            { name: 'Bob', score: 92 },
+            { name: 'David', score: 60 },
+            { name: 'Eve', score: 88 },
+            { name: 'Charlie', score: 88 },
+        ];
+
+        function filteringAndMappingStudents() {
+            const filtered = students.filter(student => student.score > 80)
+            const mapped = filtered.map(student => student.name)
+            
+            console.log(mapped)
+        }
+
+        const scores = [
+            { team: 'A', score: 7 },
+            { team: 'B', score: 12 },
+            { team: 'C', score: 8 },
+            { team: 'D', score: 9 },
+            { team: 'E', score: 11 },
+        ];
+
+        function reducingScore() {
+            const highest = scores.reduce((total, team) => team.score > total.score ? team : total)
+
+            console.log("highest score team is " + highest.team)
+        }
+
+        const products = [
+            { name: 'Laptop', category: 'Electronics' },
+            { name: 'Shoes', category: 'Fashion' },
+            { name: 'Camera', category: 'Electronics' },
+            { name: 'Jeans', category: 'Fashion' },
+            { name: 'Microwave', category: 'Electronics' },
+        ];
+
+        function countingProducts() {
+            const categories = [
+                { category: 'Electronics', amount: '0' },
+                { category: 'Fashion', amount: '0' }
+            ]
+
+            products.forEach(product => {
+                if(product.category === 'Electronics') 
+                    categories[0].amount++;
+                if(product.category === 'Fashion')
+                    categories[1].amount++;
+            })
+
+            console.log("electronic number", categories[0].amount, "fashion number", categories[1].amount)
+        }
+
+        function sortingStudents() {
+            const sortedArray = students.sort((a, b) => {
+                if(a.score > b.score) {
+                    return -1;
+                } else if(a.score < b.score) {
+                    return 1;
+                } else {
+                    let al = [a.name, b.name].sort();
+                    if(al[0] === a.name) return -1;
+                    else return 1;
+                }
+
+                return 0;
+            })
+
+            console.log(sortedArray)
+        }
+
+        filteringAndMappingStudents();
+        reducingScore()
+        countingProducts()
+        sortingStudents()
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

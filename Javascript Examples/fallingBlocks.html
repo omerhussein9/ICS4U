@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pump is coming back lets go the prophecy was fulfilled</title>
+
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #00A0E0; display: block; margin: 0 auto; }
+    </style>
+
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+
+        ctx.lineWidth = 3;
+
+        const keys = {
+            d: false,
+            a: false
+        }
+
+        document.addEventListener("keypress", e => {
+            if(e.key === 'd')
+                keys.d = true;
+
+            if(e.key === 'a')
+                keys.a = true;
+        })
+
+        document.addEventListener("keyup", e => {
+            if(e.key === 'd')
+                keys.d = false;
+
+            if(e.key === 'a')
+                keys.a = false;
+        })
+
+        const GROUND_LEVEL = canvas.height - 130;
+        let round = 1;
+
+        const player = {
+            x: 200,
+            y: GROUND_LEVEL,
+            health: 3,
+            isJumping: false,
+            jump: function() {
+
+            },
+            drawPlayer: function() {
+                ctx.beginPath();
+                ctx.rect(this.x, this.y, 50, 50);
+                ctx.fillStyle = 'yellow';
+                ctx.fill();
+                ctx.stroke();
+                ctx.closePath();
+            },
+            move: function() {
+                if(keys.d)
+                    this.x += 10 / (fps / 60);
+                if(keys.a)
+                    this.x -= 10 / (fps / 60);
+            }
+        }
+
+        class Block {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = 0;
+            }
+            drawBlock() {
+                ctx.beginPath();
+                ctx.rect(this.x, this.y, 50, 50);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.stroke();
+                ctx.closePath();
+            }
+            moveBlock() {
+                this.y += 4;
+                if(this.y > GROUND_LEVEL) {
+                    this.x = -100;
+                }
+            }
+        }
+
+        const times = [];
+        let fps;
+
+        drawFPS = () => {
+            const now = performance.now();
+            while (times.length > 0 && times[0] <= now - 1000) {
+                times.shift();
+            }
+            times.push(now);
+            fps = times.length;
+
+            ctx.beginPath();
+            ctx.fillStyle = 'black'
+            ctx.fillText("FPS: " + fps, 25, 25);
+            ctx.closePath();
+        }
+
+        function main() {
+            requestAnimationFrame(main);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.rect(0, canvas.height - 100, canvas.width, 100);
+            ctx.fillStyle = 'green'
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+
+            player.move()
+            player.drawPlayer();
+
+
+            drawFPS();
+        }  
+
+        const blocks = []
+        
+        main()
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

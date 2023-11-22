@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <title>NBA Standings</title>
+    <style>
+        body { display: flex; flex-direction: column; padding: 10px; }
+        #gameList { padding-left: 20px; color: red }
+    </style>
+</head>
+<body>
+    <a href="index.html">Input more games</a>
+
+    <p></p>
+
+    <div class="card-container"></div>
+<script>
+    const scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
+
+    const url = window.location.search
+    const searchParams = new URLSearchParams(url)
+    const team = searchParams.get('team')
+
+    const cardContainer = document.getElementById('card-container')
+
+    document.querySelector('p').textContent = `${team} Games`
+
+    cardContainer.innerHTML = ''
+    scoreData.forEach((score, index) => {
+        if(score.team1 == team || score.team2 == team) {
+            // const listItem = document.createElement('li');
+            // listItem.innerHTML = `<span>${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score}</span>`;
+            // list.appendChild(listItem);
+
+            const card = document.createElement('div')
+            card.classList.add("card")
+
+            const cardImage = document.createElement('div')
+            cardImage.classList.add("card-image")
+
+            
+        }
+    });
+</script>
+
+    <a href="standings.html">Back to standings</a>
+
+</html>

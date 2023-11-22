@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Standings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <style>body { padding: 10px; }</style>
+</head>
+<body>
+    <h1>NBA Standings</h1>
+
+    <!-- Form to collect game scores -->
+    <form id="scoreForm">
+        <div class="field is-grouped">
+            <div class="select control">
+                <select id="team1" required>
+                    <option value="-">Home Team</option>
+                    <option value="Atlanta Hawks">Atlanta Hawks</option>
+                    <option value="Boston Celtics">Boston Celtics</option>
+                    <option value="Brooklyn Nets">Brooklyn Nets</option>
+                    <option value="Charlotte Hornets">Charlotte Hornets</option>
+                    <option value="Chicago Bulls">Chicago Bulls</option>
+                    <option value="Cleveland Cavaliers">Cleveland Cavaliers</option>
+                    <option value="Dallas Mavericks">Dallas Mavericks</option>
+                    <option value="Denver Nuggets">Denver Nuggets</option>
+                    <option value="Detroit Pistons">Detroit Pistons</option>
+                    <option value="Golden State Warriors">Golden State Warriors</option>
+                    <option value="Houston Rockets">Houston Rockets</option>
+                    <option value="Indiana Pacers">Indiana Pacers</option>
+                    <option value="LA Clippers">LA Clippers</option>
+                    <option value="Los Angeles Lakers">Los Angeles Lakers</option>
+                    <option value="Memphis Grizzlies">Memphis Grizzlies</option>
+                    <option value="Miami Heat">Miami Heat</option>
+                    <option value="Milwaukee Bucks">Milwaukee Bucks</option>
+                    <option value="Minnesota Timberwolves">Minnesota Timberwolves</option>
+                    <option value="New Orleans Pelicans">New Orleans Pelicans</option>
+                    <option value="New York Knicks">New York Knicks</option>
+                    <option value="Oklahoma City Thunder">Oklahoma City Thunder</option>
+                    <option value="Orlando Magic">Orlando Magic</option>
+                    <option value="Philadelphia 76ers">Philadelphia 76ers</option>
+                    <option value="Phoenix Suns">Phoenix Suns</option>
+                    <option value="Portland Trail Blazers">Portland Trail Blazers</option>
+                    <option value="Sacramento Kings">Sacramento Kings</option>
+                    <option value="San Antonio Spurs">San Antonio Spurs</option>
+                    <option value="Toronto Raptors">Toronto Raptors</option>
+                    <option value="Utah Jazz">Utah Jazz</option>
+                    <option value="Washington Wizards">Washington Wizards</option>
+                </select>
+            </div>
+            <div class="control">
+                <input class="input is-primary" type="number" placeholder="Home Team Score" id="team1Score" required>
+            </div>
+            
+            <div class="select control">
+                <select id="team2" required>
+                    <option value="-">Away Team</option>
+                    <option value="Atlanta Hawks">Atlanta Hawks</option>
+                    <option value="Boston Celtics">Boston Celtics</option>
+                    <option value="Brooklyn Nets">Brooklyn Nets</option>
+                    <option value="Charlotte Hornets">Charlotte Hornets</option>
+                    <option value="Chicago Bulls">Chicago Bulls</option>
+                    <option value="Cleveland Cavaliers">Cleveland Cavaliers</option>
+                    <option value="Dallas Mavericks">Dallas Mavericks</option>
+                    <option value="Denver Nuggets">Denver Nuggets</option>
+                    <option value="Detroit Pistons">Detroit Pistons</option>
+                    <option value="Golden State Warriors">Golden State Warriors</option>
+                    <option value="Houston Rockets">Houston Rockets</option>
+                    <option value="Indiana Pacers">Indiana Pacers</option>
+                    <option value="LA Clippers">LA Clippers</option>
+                    <option value="Los Angeles Lakers">Los Angeles Lakers</option>
+                    <option value="Memphis Grizzlies">Memphis Grizzlies</option>
+                    <option value="Miami Heat">Miami Heat</option>
+                    <option value="Milwaukee Bucks">Milwaukee Bucks</option>
+                    <option value="Minnesota Timberwolves">Minnesota Timberwolves</option>
+                    <option value="New Orleans Pelicans">New Orleans Pelicans</option>
+                    <option value="New York Knicks">New York Knicks</option>
+                    <option value="Oklahoma City Thunder">Oklahoma City Thunder</option>
+                    <option value="Orlando Magic">Orlando Magic</option>
+                    <option value="Philadelphia 76ers">Philadelphia 76ers</option>
+                    <option value="Phoenix Suns">Phoenix Suns</option>
+                    <option value="Portland Trail Blazers">Portland Trail Blazers</option>
+                    <option value="Sacramento Kings">Sacramento Kings</option>
+                    <option value="San Antonio Spurs">San Antonio Spurs</option>
+                    <option value="Toronto Raptors">Toronto Raptors</option>
+                    <option value="Utah Jazz">Utah Jazz</option>
+                    <option value="Washington Wizards">Washington Wizards</option>
+                </select>
+            </div>
+            <div class="control">
+                <input class="input is-info" type="number" placeholder="Away Team Score" id="team2Score" required>
+            </div>
+
+            <div class="control">
+                <button class="button is-primary" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Display the list of saved game scores -->
+    <ul id="scoreList"></ul>
+
+    <a href="standings.html">View Standings</a>
+
+    <script>
+        // Get the form and list elements
+        const form = document.getElementById('scoreForm');
+        const list = document.getElementById('scoreList');
+
+        // Check if local storage has existing scores
+        let scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
+
+        // Function to update the list and save to local storage
+        function updateList() {
+            list.innerHTML = '';
+            scoreData.forEach((score, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<span>${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score} -</span> <a href="#" onclick="removeScore(${index})">Remove</a>`;
+                list.appendChild(listItem);
+            });
+            localStorage.setItem('scoreData', JSON.stringify(scoreData));
+        }
+
+        // Function to add game scores from the form
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const team1Select = document.getElementById('team1');
+            const team1ScoreInput = document.getElementById('team1Score');
+            const team2Select = document.getElementById('team2');
+            const team2ScoreInput = document.getElementById('team2Score');
+
+            const team1 = team1Select.value;
+            const team1Score = parseInt(team1ScoreInput.value);
+            const team2 = team2Select.value;
+            const team2Score = parseInt(team2ScoreInput.value);
+
+            if (!isNaN(team1Score) && !isNaN(team2Score)) {
+                const score = { team1, team1Score, team2, team2Score };
+                scoreData.push(score);
+                team1Select.value = 'Team A';
+                team1ScoreInput.value = ''; // Clear the input field for Team 1
+                team2Select.value = 'Team A';
+                team2ScoreInput.value = ''; // Clear the input field for Team 2
+                updateList();
+            }
+        });
+
+        // Function to remove a score from the list
+        function removeScore(index) {
+            scoreData.splice(index, 1);
+            updateList();
+        }
+
+        // Initial list population
+        updateList();
+    </script>
+</body>
+</html>

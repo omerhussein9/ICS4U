@@ -7,16 +7,52 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
     <title>NBA Standings</title>
     <style>
-        body { display: flex; flex-direction: column; padding: 10px; }
+        body { padding: 10px; }
         #gameList { padding-left: 20px; color: red }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 5fr;
+            grid-gap: 10px
+        }
+        .grid {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid div {
+            padding-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <a href="index.html">Input more games</a>
 
-    <p></p>
+    <div class="content is-medium">
+        <h1></h1>
+    </div>
 
-    <div class="card-container"></div>
+
+    <div class="container">
+        <div class="grid">
+            <label for="control">From</label>
+            <div class="control">
+                <input class="input is-info" type="date" id="date1">
+            </div>
+            <label for="control">To</label>
+            <div class="control">
+                <input class="input is-info" type="date" id="date2">
+            </div>
+
+            <div class="control">
+                <button class="button is-primary" onclick="filterDates()">Filter Dates</button>
+            </div>
+        </div>
+    
+        <div class="card-container">
+            <p></p>
+        </div>
+    </div>
+
 <script>
     const scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
 
@@ -24,26 +60,46 @@
     const searchParams = new URLSearchParams(url)
     const team = searchParams.get('team')
 
-    const cardContainer = document.getElementById('card-container')
+    document.querySelector('p').textContent = '';
+    document.querySelector('h1').textContent = team + " Games"
 
-    document.querySelector('p').textContent = `${team} Games`
+    function filterDates() {
+        const date1 = document.getElementById('date1').value || ''
+        const date2 = document.getElementById('date2').value || ''
+        console.log(date1, date2)
+    }
 
-    cardContainer.innerHTML = ''
     scoreData.forEach((score, index) => {
         if(score.team1 == team || score.team2 == team) {
-            // const listItem = document.createElement('li');
-            // listItem.innerHTML = `<span>${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score}</span>`;
-            // list.appendChild(listItem);
-
             const card = document.createElement('div')
             card.classList.add("card")
+            document.querySelector('p').append(card)
 
-            const cardImage = document.createElement('div')
-            cardImage.classList.add("card-image")
+            const cardHeader = document.createElement('header')
+            cardHeader.classList.add('card-header')
+            card.append(cardHeader)
 
-            
+            const cardHeaderTitle = document.createElement('p')
+            cardHeaderTitle.classList.add('card-header-title')
+            cardHeaderTitle.textContent = teamWon(score) + " " + score.date
+            cardHeader.append(cardHeaderTitle)
+
+            const cardContent = document.createElement('div')
+            cardContent.classList.add("card-content")
+            card.append(cardContent)
+
+            const p = document.createElement('p')
+            p.classList.add('subtitle')
+            p.textContent = `${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score}`
+            cardContent.append(p)           
         }
     });
+
+    function teamWon(score) {
+        if(score.team1 == team && score.team1Score > score.team2Score) return "VICTORY!"
+        if(score.team2 == team && score.team2Score > score.team1Score) return "VICTORY!"
+        else return "DEFEAT"
+    }
 </script>
 
     <a href="standings.html">Back to standings</a>

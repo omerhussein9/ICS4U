@@ -7,52 +7,69 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
     <title>NBA Standings</title>
     <style>
-        body { display: flex; flex-direction: column; padding: 10px; }
         .align { padding: 10px; cursor: pointer; }
         .team { color: red; }
+        th { background-color: cyan; }
+
+        @media screen and (max-width: 768px) {
+            #remove {
+                display: none
+            }
+        }
     </style>
 </head>
-<body>
+<body onresize="textSort(currentTextSort, false)">
     <a href="index.html">Input more games</a>
-    <table class="table">
-        <thead>
-          <tr>
-            <th><abbr title="Position">Pos</abbr></th>
-            <th>Team</th>
-            <th><abbr title="Played">Pld</abbr></th>
-            <th><abbr title="Wins">W</abbr></th>
-            <th><abbr title="Losses">L</abbr></th>
-            <th><abbr title="Points per Game">Pts/Game</abbr></th>
-            <th>Win Streak</th>
-          </tr>
-        </thead>
-        <!-- <tfoot>
-          <tr>
-            <th><abbr title="Position">Pos</abbr></th>
-            <th>Team</th>
-            <th><abbr title="Played">Pld</abbr></th>
-            <th><abbr title="Wins">W</abbr></th>
-            <th><abbr title="Losses">L</abbr></th>
-            <th><abbr title="Points per Game">Pts/Game</abbr></th>
-            <th>Win Streak</th>
-          </tr>
-        </tfoot> -->
-        <tbody>
-          
-        </tbody>
-      </table>
+
+    <div class="section">
+        <div class="columns is-multiline">
+            <div class="column is-half is-offset-one-quarter"></div>
+                <table class="table is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th id="position"><abbr title="Position">Pos</abbr></th>
+                        <th>Team</th>
+                        <th><abbr title="Played">Pld</abbr></th>
+                        <th><abbr title="Wins">W</abbr></th>
+                        <th><abbr title="Losses">L</abbr></th>
+                        <th id="remove"><abbr title="Points per Game">Pts/Game</abbr></th>
+                        <th id="remove">Win Streak</th>
+                        <th id="remove"><abbr title="Winning Percentage">PCT</abbr></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+      <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <ul id="pagination" class="pagination-list">
+        </ul>
+      </nav>
 </body>
 
 <script>
+    const eastern_teams = [ 
+        "Boston Celtics", "Orlando Magic", "Milwaukee Bucks", "Philadelphia 76ers", "Indiana Pacers", "Miami Heat",
+        "New York Knicks", "Cleveland Caveliers", "Atlanta Hawks", "Brooklyn Nets", "Toronto Raptors", "Charlotte Hornets", "Chicago Bulls", "Detroit Pistons", "Washington Wizards"
+    ]
+
     const square = '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>'
     const up_arrow = '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>'
     const down_arrow = '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>'
 
     let lastSort = 0
+    let currentTextSort = document.getElementById('position')
 
     let scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
 
     const teams = []
+    const num_teams_per_page = 3;
+    let curr_page = 1;
+    let max_page = 0;
 
     function Team(name) {
         this.name = name;
@@ -110,7 +127,7 @@
                 icon.setAttribute('state', '0')
 
                 if(td.innerText == 'Pos') { // sets the default state for the table as position in descending order
-                    icon.innerHTML = down_arrow
+                    icon.innerHTML = up_arrow
                     icon.setAttribute('state', '1')
                 }
 
@@ -126,26 +143,8 @@
             if(td.innerText !== undefined) {
                 td.lastChild.addEventListener('click', event => {
                     let date = new Date();
-                    if(date.getSeconds() > lastSort || (date.getSeconds() === 0 && lastSort !== 0)) {
-                        resetStates(td.innerText)
-
-                        if(td.innerText == 'Pos')
-                            setStates(posForward, posDownward, td.lastChild)
-
-                        if(td.innerText == 'Pld')
-                            setStates(pldForward, pldDownward, td.lastChild)
-
-                        if(td.innerText == 'W')
-                            setStates(posForward, posDownward, td.lastChild)
-
-                        if(td.innerText == 'L')
-                            setStates(lForward, lDownward, td.lastChild)
-
-                        if(td.innerText == 'Pts/Game')
-                            setStates(ptsPerGameForward, ptsPerGameDownward, td.lastChild)
-
-                        if(td.innerText == 'Win Streak')
-                            setStates(wstreakForward, wstreakDownward, td.lastChild)
+                    if(date.getSeconds() !== lastSort) {
+                        textSort(td, true)
                         
                         lastSort = date.getSeconds()
                     }
@@ -154,23 +153,60 @@
         })
     })
 
-    function setStates(forwardsSort, downwardsSort, child) {
+    function textSort(td, sortedFromClick) {
+        resetStates(td.innerText)
+
+        if(td.innerText == 'Pos')
+            setStates(posForward, posDownward, td, sortedFromClick)
+
+        if(td.innerText == 'Pld')
+            setStates(pldForward, pldDownward, td, sortedFromClick)
+
+        if(td.innerText == 'W')
+            setStates(posDownward, posForward, td, sortedFromClick)
+
+        if(td.innerText == 'L')
+            setStates(lDownward, lForward, td, sortedFromClick)
+
+        if(td.innerText == 'Pts/Game')
+            setStates(ptsPerGameDownward, ptsPerGameForward, td, sortedFromClick)
+
+        if(td.innerText == 'Win Streak')
+            setStates(wstreakDownward, wstreakForward, td, sortedFromClick)
+    }
+
+    function setStates(forwardsSort, downwardsSort, td, sortedFromClick) {
+        let child = td.lastChild
         switch(child.getAttribute('state')) {
             case '0':
-                child.innerHTML = down_arrow
-                updateStandings(forwardsSort)
-                child.setAttribute('state', '1')
+                if(sortedFromClick) {
+                    child.innerHTML = down_arrow
+                    child.setAttribute('state', '1')
+                    updateStandings(downwardsSort)
+                }
+                else 
+                    updateStandings(forwardsSort)
                 break;
             case '1':
-                child.innerHTML = down_arrow
-                updateStandings(forwardsSort)
-                child.setAttribute('state', '2')
+                if(sortedFromClick) {
+                    child.innerHTML = down_arrow
+                    child.setAttribute('state', '2')
+                    updateStandings(downwardsSort)
+                }
+                else 
+                    updateStandings(forwardsSort)
                 break;
             case '2':
-                child.innerHTML = up_arrow
-                updateStandings(downwardsSort)
-                child.setAttribute('state', '1')
+                if(sortedFromClick) {
+                    child.innerHTML = up_arrow
+                    child.setAttribute('state', '1')
+                    updateStandings(forwardsSort)
+                }
+                else 
+                    updateStandings(downwardsSort)
+
         }
+        currentTextSort = child.parentNode
     }
 
     function resetStates(str) {
@@ -187,10 +223,15 @@
     }
 
     function updateStandings(sortFunction) {
+        max_page = teams.length % num_teams_per_page == 0 ? teams.length / num_teams_per_page : (teams.length / num_teams_per_page) + 1;
+
         const tbody = document.querySelector('tbody')
 
         tbody.innerHTML = ''
-        teams.sort(sortFunction).forEach((team, index) => {
+
+        const sortedAndSplicedArray = teams.sort(sortFunction).slice((curr_page-1)*num_teams_per_page, (curr_page-1)*num_teams_per_page+num_teams_per_page)
+
+        sortedAndSplicedArray.forEach((team, index) => {
             const tr = document.createElement('tr')
 
             // display the position the team is currently in
@@ -218,19 +259,52 @@
             losses.innerText = team.l
             tr.appendChild(losses)
 
-            // display the amount of points the team has scored
-            const points = document.createElement('td')
-            points.innerText = team.points / (team.w + team.l)
-            tr.appendChild(points)
+            if(updateWidth()) {
+                // display the amount of points the team has scored
+                const points = document.createElement('td')
+                points.innerText = (team.points / (team.w + team.l) + "").substring(0, 5)
+                tr.appendChild(points)
 
-            // display the current win streak of that team
-            const wstreak = document.createElement('td')
-            wstreak.innerText = team.wstreak === 0 ? 0 : 'W' + team.wstreak
-            tr.appendChild(wstreak)
+                // display the current win streak of that team
+                const wstreak = document.createElement('td')
+                wstreak.innerText = team.wstreak === 0 ? 0 : 'W' + team.wstreak
+                tr.appendChild(wstreak)
+
+                const pct = document.createElement('td')
+                pct.innerText = (team.w / (team.w + team.l) + "").substring(0, 5)
+                tr.appendChild(pct)
+            }
 
             tbody.appendChild(tr)
         })
     }
+
+    const updateWidth = () => window.innerWidth > 768
+
+    function updatePagination(){
+        const ul = document.querySelector("#pagination");
+        for(let page = 1; page<=max_page; page++){
+            const li = document.createElement('li');
+            li.innerHTML = `<a class="pagination-link" aria-label="Goto page ${page}">${page}</a>`
+            ul.append(li);
+        }
+    }
+
+    const ul = document.querySelector('ul')
+
+    ul.addEventListener('mouseover', e => {
+        ul.childNodes.forEach(li => {
+            li.addEventListener('click', event => {
+                let date = new Date();
+                    if(date.getSeconds() !== lastSort) {
+                        curr_page = parseInt(li.textContent)
+                        textSort(currentTextSort, false)
+                        
+                        lastSort = date.getSeconds()
+                    }
+            })
+        })
+    })
 
     // sorting functions to be called before updating the standings
 
@@ -238,9 +312,9 @@
 
     posDownward = (a, b) => a.position > b.position ? -1 : 1
 
-    pldForward = (a, b) => a.w + a.l > b.w + b.l ? -1 : 1
+    pldDownward = (a, b) => a.w + a.l > b.w + b.l ? -1 : 1
 
-    pldDownward = (a, b) => a.w + a.l < b.w + b.l ? -1 : 1
+    pldForward = (a, b) => a.w + a.l < b.w + b.l ? -1 : 1
 
     lForward = (a, b) => a.l > b.l ? -1 : 1
 
@@ -255,5 +329,6 @@
     wstreakDownward = (a, b) => a.wstreak < b.wstreak ? -1 : 1
 
     initializeTeams();
+    updatePagination();
 </script>
 </html>

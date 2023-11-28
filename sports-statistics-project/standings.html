@@ -8,8 +8,6 @@
     <title>NBA Standings</title>
     <style>
         .align { padding: 10px; cursor: pointer; }
-        .team { color: red; }
-        th { background-color: cyan; }
 
         @media screen and (max-width: 768px) {
             #remove {
@@ -23,7 +21,6 @@
 
     <div class="section">
         <div class="columns is-multiline">
-            <div class="column is-half is-offset-one-quarter"></div>
                 <table class="table is-fullwidth">
                     <thead>
                     <tr>
@@ -43,15 +40,11 @@
                 </table>
             </div>
         </div>
-    </div>
-
-      <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <ul id="pagination" class="pagination-list">
-        </ul>
-      </nav>
 </body>
 
 <script>
+    const teams = []
+
     const eastern_teams = [ 
         "Boston Celtics", "Orlando Magic", "Milwaukee Bucks", "Philadelphia 76ers", "Indiana Pacers", "Miami Heat",
         "New York Knicks", "Cleveland Caveliers", "Atlanta Hawks", "Brooklyn Nets", "Toronto Raptors", "Charlotte Hornets", "Chicago Bulls", "Detroit Pistons", "Washington Wizards"
@@ -65,11 +58,6 @@
     let currentTextSort = document.getElementById('position')
 
     let scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
-
-    const teams = []
-    const num_teams_per_page = 3;
-    let curr_page = 1;
-    let max_page = 0;
 
     function Team(name) {
         this.name = name;
@@ -173,6 +161,9 @@
 
         if(td.innerText == 'Win Streak')
             setStates(wstreakDownward, wstreakForward, td, sortedFromClick)
+
+        if(td.innerText == 'PCT')
+            setStates(pctDownward, pctForward, td, sortedFromClick)
     }
 
     function setStates(forwardsSort, downwardsSort, td, sortedFromClick) {
@@ -223,15 +214,11 @@
     }
 
     function updateStandings(sortFunction) {
-        max_page = teams.length % num_teams_per_page == 0 ? teams.length / num_teams_per_page : (teams.length / num_teams_per_page) + 1;
-
         const tbody = document.querySelector('tbody')
 
         tbody.innerHTML = ''
 
-        const sortedAndSplicedArray = teams.sort(sortFunction).slice((curr_page-1)*num_teams_per_page, (curr_page-1)*num_teams_per_page+num_teams_per_page)
-
-        sortedAndSplicedArray.forEach((team, index) => {
+        teams.sort(sortFunction).forEach((team, index) => {
             const tr = document.createElement('tr')
 
             // display the position the team is currently in
@@ -281,31 +268,6 @@
 
     const updateWidth = () => window.innerWidth > 768
 
-    function updatePagination(){
-        const ul = document.querySelector("#pagination");
-        for(let page = 1; page<=max_page; page++){
-            const li = document.createElement('li');
-            li.innerHTML = `<a class="pagination-link" aria-label="Goto page ${page}">${page}</a>`
-            ul.append(li);
-        }
-    }
-
-    const ul = document.querySelector('ul')
-
-    ul.addEventListener('mouseover', e => {
-        ul.childNodes.forEach(li => {
-            li.addEventListener('click', event => {
-                let date = new Date();
-                    if(date.getSeconds() !== lastSort) {
-                        curr_page = parseInt(li.textContent)
-                        textSort(currentTextSort, false)
-                        
-                        lastSort = date.getSeconds()
-                    }
-            })
-        })
-    })
-
     // sorting functions to be called before updating the standings
 
     posForward = (a, b) => a.position < b.position ? -1 : 1
@@ -328,7 +290,10 @@
 
     wstreakDownward = (a, b) => a.wstreak < b.wstreak ? -1 : 1
 
+    pctForward = (a, b) => a.w / (a.w + a.l) > b.w / (b.w + b.l) ? -1 : 1
+    
+    pctDownward = (a, b) => a.w / (a.w + a.l) < b.w / (b.w + b.l) ? -1 : 1
+
     initializeTeams();
-    updatePagination();
 </script>
 </html>

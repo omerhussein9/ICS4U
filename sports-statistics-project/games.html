@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
     <title>NBA Standings</title>
     <style>
-        body { padding: 10px; }
-        #gameList { padding-left: 20px; color: red }
+        body { 
+            padding: 10px; 
+        }
+
         .container {
             display: grid;
             grid-template-columns: 1fr 5fr;
@@ -21,6 +23,23 @@
 
         .grid div {
             padding-bottom: 10px;
+            padding-right: 10px;
+        }
+
+        .card-container{
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 20px;
+        }
+
+        footer nav {
+            padding-top: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -46,12 +65,24 @@
             <div class="control">
                 <button class="button is-primary" onclick="filterDates()">Filter Dates</button>
             </div>
+
+            <div class="control">
+                <button class="button is-primary" onclick="resetGames()">Reset</button>
+            </div>
         </div>
     
         <div class="card-container">
-            <p></p>
         </div>
     </div>
+</body>
+
+<footer>
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <ul id="pagination" class="pagination-list">
+        </ul>
+      </nav>
+</footer>
+    
 
 <script>
     const scoreData = JSON.parse(localStorage.getItem('scoreData')) || [];
@@ -60,46 +91,137 @@
     const searchParams = new URLSearchParams(url)
     const team = searchParams.get('team')
 
-    document.querySelector('p').textContent = '';
+    const num_games_per_page = 5;
+    let games_on_page = 0;
+    let curr_page = 1;
+    let max_page = 0;
+
+    let isFiltered = false
+    let lastPagination = 0
+
+    let arr = []
+    let newArr = []
+
     document.querySelector('h1').textContent = team + " Games"
 
     function filterDates() {
-        const date1 = document.getElementById('date1').value || ''
-        const date2 = document.getElementById('date2').value || ''
-        console.log(date1, date2)
+        const date1 = new Date(document.getElementById('date1').value) || ''
+        const date2 = new Date(document.getElementById('date2').value) || ''
+
+        if(date1.getTime() > date2.getTime() || date1 === '' || date2 === '') {
+            alert("Please make sure that the first date is less than the second date and they both have values.")
+            return;
+        }
+
+        gamesWithTeam()
+
+        document.querySelector(".card-container").innerHTML = ''
+        arr = arr.filter((score, index) => {
+            let d = new Date(score.date)
+            if(d.getTime() >= date1.getTime() && d.getTime() <= date2.getTime()) {
+                return score
+            }
+        })
+
+        if(arr.length === 0) {
+            alert("No games for this selected date range, resetting filters")
+            resetGames()
+            return;
+        }
+
+        isFiltered = true
+        updatePagination()
+
+        createCards()
     }
 
-    scoreData.forEach((score, index) => {
-        if(score.team1 == team || score.team2 == team) {
-            const card = document.createElement('div')
-            card.classList.add("card")
-            document.querySelector('p').append(card)
+    function resetGames() {
+        gamesWithTeam()
 
-            const cardHeader = document.createElement('header')
-            cardHeader.classList.add('card-header')
-            card.append(cardHeader)
+        isFiltered = false
 
-            const cardHeaderTitle = document.createElement('p')
-            cardHeaderTitle.classList.add('card-header-title')
-            cardHeaderTitle.textContent = teamWon(score) + " " + score.date
-            cardHeader.append(cardHeaderTitle)
+        document.querySelector(".card-container").innerHTML = ''
+        createCards()
+    }
 
-            const cardContent = document.createElement('div')
-            cardContent.classList.add("card-content")
-            card.append(cardContent)
+    function createCards() {
+        newArr = arr.slice((curr_page - 1) * num_games_per_page, num_games_per_page * curr_page)
 
-            const p = document.createElement('p')
-            p.classList.add('subtitle')
-            p.textContent = `${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score}`
-            cardContent.append(p)           
-        }
-    });
+        newArr.forEach((score, index) => {
+                const card = document.createElement('div')
+                card.classList.add("card")
+                document.querySelector('.card-container').append(card)
+
+                const cardHeader = document.createElement('header')
+                cardHeader.classList.add('card-header')
+                card.append(cardHeader)
+
+                const cardHeaderTitle = document.createElement('p')
+                cardHeaderTitle.classList.add('card-header-title')
+                cardHeaderTitle.textContent = teamWon(score) + " " + score.date
+                cardHeader.append(cardHeaderTitle)
+
+                const cardContent = document.createElement('div')
+                cardContent.classList.add("card-content")
+                card.append(cardContent)
+
+                const p = document.createElement('p')
+                p.classList.add('subtitle')
+                p.textContent = `${score.team1}: ${score.team1Score} - ${score.team2}: ${score.team2Score}`
+                cardContent.append(p) 
+        })
+    }
+
+    function gamesWithTeam() {
+        arr = []
+        scoreData.forEach((score, index) => {
+            if(score.team1 == team || score.team2 == team) {
+                arr.push(score)
+            }
+        })
+
+        updatePagination()
+    }
 
     function teamWon(score) {
         if(score.team1 == team && score.team1Score > score.team2Score) return "VICTORY!"
         if(score.team2 == team && score.team2Score > score.team1Score) return "VICTORY!"
         else return "DEFEAT"
     }
+
+    function updatePagination(){
+        max_page = Math.ceil((arr.length) / num_games_per_page)
+
+        const ul = document.querySelector("#pagination");
+        ul.innerHTML = ''
+        for(let page = 1; page<=max_page; page++){
+            const li = document.createElement('li');
+            li.innerHTML = `<a class="pagination-link" aria-label="Goto page ${page}">${page}</a>`
+            ul.append(li);
+        }
+    }
+
+    const ul = document.querySelector('ul')
+
+    ul.addEventListener('mouseover', e => {
+        ul.childNodes.forEach(li => {
+            li.addEventListener('click', event => {
+                if(lastPagination !== new Date().getSeconds()) {
+                    curr_page = parseInt(li.textContent)
+
+                    document.querySelector(".card-container").innerHTML = ''
+
+                    if(isFiltered) filterDates()
+                    else createCards()
+
+                    lastPagination = new Date().getSeconds()
+                }
+            })
+        })
+    })
+
+    gamesWithTeam()
+    createCards()
 </script>
 
     <a href="standings.html">Back to standings</a>

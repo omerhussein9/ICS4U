@@ -1,0 +1,19 @@
+.nav img {
+    height: 100%
+}
+
+.card-container {
+    display: flex;
+}
+
+.card {
+    margin: 30px;
+    width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}

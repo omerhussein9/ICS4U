@@ -1,0 +1,31 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-gap: 10px;
+}
+.grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid div {
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.card-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 20px; 
+}
+
+footer nav {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}

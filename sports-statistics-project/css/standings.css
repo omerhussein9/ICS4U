@@ -1,0 +1,14 @@
+.align { 
+    padding: 10px; 
+    cursor: pointer; 
+}
+
+label {
+    margin-left: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    #remove {
+        display: none
+    }
+}

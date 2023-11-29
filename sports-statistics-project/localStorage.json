@@ -1,0 +1,205 @@
+[
+    {
+        "team1": "Boston Celtics",
+        "team1Score": 112,
+        "team2": "Toronto Raptors",
+        "team2Score": 108,
+        "date": "2024-02-14"
+    },
+    {
+        "team1": "Golden State Warriors",
+        "team1Score": 120,
+        "team2": "Los Angeles Clippers",
+        "team2Score": 115,
+        "date": "2024-02-28"
+    },
+    {
+        "team1": "Denver Nuggets",
+        "team1Score": 108,
+        "team2": "Portland Trail Blazers",
+        "team2Score": 104,
+        "date": "2024-03-10"
+    },
+    {
+        "team1": "Milwaukee Bucks",
+        "team1Score": 105,
+        "team2": "Chicago Bulls",
+        "team2Score": 102,
+        "date": "2024-04-07"
+    },
+    {
+        "team1": "Los Angeles Lakers",
+        "team1Score": 115,
+        "team2": "Atlanta Hawks",
+        "team2Score": 112,
+        "date": "2024-04-20"
+    },
+    {
+        "team1": "Brooklyn Nets",
+        "team1Score": 118,
+        "team2": "Indiana Pacers",
+        "team2Score": 113,
+        "date": "2024-05-03"
+    },
+    {
+        "team1": "Golden State Warriors",
+        "team1Score": 118,
+        "team2": "Phoenix Suns",
+        "team2Score": 115,
+        "date": "2023-09-28"
+    },
+    {
+        "team1": "Houston Rockets",
+        "team1Score": 105,
+        "team2": "Denver Nuggets",
+        "team2Score": 103,
+        "date": "2023-10-05"
+    },
+    {
+        "team1": "Toronto Raptors",
+        "team1Score": 112,
+        "team2": "Miami Heat",
+        "team2Score": 110,
+        "date": "2023-10-18"
+    },
+    {
+        "team1": "Los Angeles Clippers",
+        "team1Score": 120,
+        "team2": "Dallas Mavericks",
+        "team2Score": 115,
+        "date": "2023-10-31"
+    },
+    {
+        "team1": "Philadelphia 76ers",
+        "team1Score": 108,
+        "team2": "Boston Celtics",
+        "team2Score": 105,
+        "date": "2023-11-10"
+    },
+    {
+        "team1": "Milwaukee Bucks",
+        "team1Score": 112,
+        "team2": "Chicago Bulls",
+        "team2Score": 107,
+        "date": "2023-11-20"
+    },
+    {
+        "team1": "Atlanta Hawks",
+        "team1Score": 104,
+        "team2": "Indiana Pacers",
+        "team2Score": 98,
+        "date": "2023-12-02"
+    },
+    {
+        "team1": "New York Knicks",
+        "team1Score": 100,
+        "team2": "Orlando Magic",
+        "team2Score": 95,
+        "date": "2023-12-15"
+    },
+    {
+        "team1": "Utah Jazz",
+        "team1Score": 117,
+        "team2": "Portland Trail Blazers",
+        "team2Score": 113,
+        "date": "2023-12-28"
+    },
+    {
+        "team1": "Los Angeles Lakers",
+        "team1Score": 108,
+        "team2": "Brooklyn Nets",
+        "team2Score": 106,
+        "date": "2024-01-05"
+    },
+    {
+        "team1": "Brooklyn Nets",
+        "team1Score": 112,
+        "team2": "Toronto Raptors",
+        "team2Score": 108,
+        "date": "2023-05-28"
+    },
+    {
+        "team1": "Golden State Warriors",
+        "team1Score": 120,
+        "team2": "Dallas Mavericks",
+        "team2Score": 118,
+        "date": "2023-06-05"
+    },
+    {
+        "team1": "Miami Heat",
+        "team1Score": 105,
+        "team2": "Philadelphia 76ers",
+        "team2Score": 100,
+        "date": "2023-06-18"
+    },
+    {
+        "team1": "Los Angeles Clippers",
+        "team1Score": 108,
+        "team2": "Houston Rockets",
+        "team2Score": 102,
+        "date": "2023-07-01"
+    },
+    {
+        "team1": "Denver Nuggets",
+        "team1Score": 115,
+        "team2": "Indiana Pacers",
+        "team2Score": 110,
+        "date": "2023-07-15"
+    },
+    {
+        "team1": "Portland Trail Blazers",
+        "team1Score": 112,
+        "team2": "Atlanta Hawks",
+        "team2Score": 105,
+        "date": "2023-07-28"
+    },
+    {
+        "team1": "Phoenix Suns",
+        "team1Score": 122,
+        "team2": "Utah Jazz",
+        "team2Score": 118,
+        "date": "2023-08-05"
+    },
+    {
+        "team1": "Chicago Bulls",
+        "team1Score": 100,
+        "team2": "Milwaukee Bucks",
+        "team2Score": 98,
+        "date": "2023-08-18"
+    },
+    {
+        "team1": "New York Knicks",
+        "team1Score": 107,
+        "team2": "Boston Celtics",
+        "team2Score": 104,
+        "date": "2023-09-01"
+    },
+    {
+        "team1": "Orlando Magic",
+        "team1Score": 94,
+        "team2": "Los Angeles Lakers",
+        "team2Score": 92,
+        "date": "2023-09-15"
+    },
+    {
+        "team1": "Brooklyn Nets",
+        "team1Score": 105,
+        "team2": "Toronto Raptors",
+        "team2Score": 116,
+        "date": "2023-11-17"
+    },
+    {
+        "team1": "Toronto Raptors",
+        "team1Score": 124,
+        "team2": "Minnesota Timberwolves",
+        "team2Score": 113,
+        "date": "2023-10-30"
+    },
+    {
+        "team1": "Toronto Raptors",
+        "team1Score": 102,
+        "team2": "Memphis Grizzlies",
+        "team2Score": 99,
+        "date": "2023-12-25"
+    }
+]
